@@ -1,0 +1,34 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = "okapi.sample.Launcher"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.vertx:vertx-core:3.3.2'
+    compile "io.vertx:vertx-lang-groovy:3.3.2"
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile 'io.vertx:vertx-web:3.3.2'
+    compile 'com.google.guava:guava:19.0'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
