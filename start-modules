@@ -6,7 +6,9 @@ gradle fatJar
 
 ./docker-run
 
-cd ../second-module
+cd ..
+
+cd second-module
 
 gradle fatJar
 
@@ -14,3 +16,4 @@ gradle fatJar
 
 ./docker-run
 
+cd ..
