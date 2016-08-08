@@ -1,6 +1,6 @@
 package okapi.sample;
 
-import io.vertx.groovy.core.Vertx;
+import io.vertx.core.Vertx;
 import java.util.concurrent.CompletableFuture;
 
 public class Launcher {

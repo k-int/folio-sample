@@ -9,27 +9,22 @@ public class Launcher {
 
   public static void main(String[] args) {
 
-    System.out.println("Server Starting");
+    println "Server Starting"
 
     CompletableFuture deployed = start();
 
-    deployed.join();
+    deployed.join()
 
-    System.out.println("Server Started");
+    println "Server Started"
   }
 
   public static CompletableFuture start() {
-    vertx = Vertx.vertx();
+    vertx = Vertx.vertx()
 
-    CompletableFuture deployed = new CompletableFuture();
+    CompletableFuture deployed = new CompletableFuture()
 
-    ApiVerticle.deploy(vertx, deployed);
+    ApiVerticle.deploy(vertx, deployed)
 
-    return deployed;
-  }
-
-  public static void stop()
-  {
-    if (vertx != null) { vertx.close(); }
+    deployed
   }
 }

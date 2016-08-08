@@ -1,14 +1,12 @@
 package okapi.sample;
 
-import com.google.common.collect.ImmutableMap;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.ext.web.Route;
+import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.*;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.groovy.core.Vertx;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +17,11 @@ public class ApiVerticle extends AbstractVerticle {
 
     public static void deploy(Vertx vertx, CompletableFuture<Void> deployed) {
 
-        vertx.deployVerticle("okapi.sample.ApiVerticle", ImmutableMap.of("worker", true), res -> {
+        DeploymentOptions options = new DeploymentOptions();
+
+        options.setWorker(true);
+
+        vertx.deployVerticle("okapi.sample.ApiVerticle", options, res -> {
             if (res.succeeded()) {
                 deployed.complete(null);
             } else {
@@ -34,7 +36,9 @@ public class ApiVerticle extends AbstractVerticle {
 
         Router router = Router.router(vertx);
 
-        registerRootRoute(router);
+        router.route(HttpMethod.GET, "/resource").handler(this::getResource);
+
+        router.route().handler(this::handleRoot);
 
         server.requestHandler(router::accept)
                 .listen(9201,
@@ -60,13 +64,40 @@ public class ApiVerticle extends AbstractVerticle {
             System.out.format("%s : %s\n", entry.getKey(), entry.getValue());
         }
 
-        HttpServerResponse response = routingContext.response();
+        System.out.println("End of Headers Received");
+        System.out.println("");
+        System.out.println("");
+
+        success(routingContext.response(),
+                new JsonObject().put("Message", "Welcome to a sample Okapi module"));
+    }
+
+    public void getResource(RoutingContext routingContext) {
+
+        HttpClient client = routingContext.vertx().createHttpClient();
+
+        client.getAbs("http://localhost:9202/resource",
+            response -> {
+                response.bodyHandler(buffer -> {
+                    JsonObject resource = new JsonObject();
+
+                    resource.put("Name", "My Interesting Resource");
+
+                    resource.put("OtherResource", new JsonObject(buffer.getString(0, buffer.length())));
+
+                    success(routingContext.response(), resource);
+                });
+            }).end();
+    }
+
+    private void success(io.vertx.core.http.HttpServerResponse response, Object body) {
+        String json = Json.encodePrettily(body);
+
         response.putHeader("content-type", "application/json");
+        response.putHeader("content-length", Integer.toString(json.length()));
 
-        response.end("{ \"Message\" : \"Welcome to a sample Okapi module\" }");
+        response.write(json);
+        response.end();
     }
 
-    public Route registerRootRoute(Router router) {
-        return router.route().handler(this::handleRoot);
-    }
 }

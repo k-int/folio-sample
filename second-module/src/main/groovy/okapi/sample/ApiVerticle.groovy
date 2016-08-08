@@ -1,18 +1,16 @@
-package okapi.sample;
+package okapi.sample
 
-import com.google.common.collect.ImmutableMap;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
-import io.vertx.core.MultiMap;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.ext.web.Route;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.groovy.core.Vertx;
+import io.vertx.core.AbstractVerticle
+import io.vertx.core.Future
+import io.vertx.core.http.HttpMethod
+import io.vertx.core.http.HttpServer
+import io.vertx.core.json.Json
+import io.vertx.core.json.JsonObject
+import io.vertx.ext.web.Router
+import io.vertx.ext.web.RoutingContext
+import io.vertx.groovy.core.Vertx
 
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletableFuture
 
 public class ApiVerticle extends AbstractVerticle {
 
@@ -31,11 +29,12 @@ public class ApiVerticle extends AbstractVerticle {
 
     @Override
     public void start(Future deployed) {
-        server = vertx.createHttpServer();
+        server = vertx.createHttpServer()
 
-        Router router = Router.router(vertx);
+        def router = Router.router(vertx)
 
-        registerRootRoute(router);
+        router.route(HttpMethod.GET, "/resource").handler(this.&getResource)
+        router.route().handler(this.&handleRoot)
 
         server.requestHandler(router.&accept)
                 .listen(9202,
@@ -45,7 +44,7 @@ public class ApiVerticle extends AbstractVerticle {
                     } else {
                         deployed.fail(result.cause());
                     }
-                });
+                })
     }
 
     @Override
@@ -55,19 +54,40 @@ public class ApiVerticle extends AbstractVerticle {
 
     public void handleRoot(RoutingContext routingContext) {
 
-        System.out.println("Headers Received");
+        outputHeaders routingContext
+
+        success(routingContext.response(),
+                new JsonObject().put("Message", "Welcome to a sample Okapi module"))
+    }
+
+    private outputHeaders(RoutingContext routingContext) {
+        println "Headers Received"
 
         for (Map.Entry<String, String> entry : routingContext.request().headers().entries()) {
-            System.out.format("%s : %s\n", entry.getKey(), entry.getValue());
+            System.out.format("%s : %s\n", entry.getKey(), entry.getValue())
         }
 
-        HttpServerResponse response = routingContext.response();
-        response.putHeader("content-type", "application/json");
-
-        response.end("{ \"Message\" : \"Welcome to a sample Okapi module\" }");
+        println "End of Headers Received"
+        println ""
+        println ""
     }
 
-    public Route registerRootRoute(Router router) {
-        return router.route().handler(this.&handleRoot);
+    public void getResource(RoutingContext routingContext) {
+        def resource = new JsonObject();
+
+        resource.put "Name", "My Other Interesting Resource"
+
+        success(routingContext.response(), resource)
     }
+
+    private success(response, body) {
+        def json = Json.encodePrettily(body)
+
+        response.putHeader "content-type", "application/json"
+        response.putHeader "content-length", Integer.toString(json.length())
+
+        response.write json
+        response.end()
+    }
+
 }

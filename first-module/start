@@ -1,0 +1,3 @@
+gradle fatJar
+
+java -jar build/libs/first-module.jar
