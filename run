@@ -1,0 +1,8 @@
+cd first-module
+
+gradle fatJar
+
+./docker-build
+
+./docker-run
+
