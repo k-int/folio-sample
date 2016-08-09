@@ -73,6 +73,8 @@ public class ApiVerticle extends AbstractVerticle {
     }
 
     public void getResource(RoutingContext routingContext) {
+        outputHeaders(routingContext)
+
         def resource = new JsonObject();
 
         resource.put "Name", "My Other Interesting Resource"

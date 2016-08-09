@@ -57,11 +57,7 @@ public class ApiVerticle extends AbstractVerticle {
 
     public void handleRoot(RoutingContext routingContext) {
 
-        System.out.println("Headers Received");
-
-        for (Map.Entry<String, String> entry : routingContext.request().headers().entries()) {
-            System.out.format("%s : %s\n", entry.getKey(), entry.getValue());
-        }
+        outputHeaders(routingContext);
 
         System.out.println("End of Headers Received");
         System.out.println("");
@@ -71,9 +67,21 @@ public class ApiVerticle extends AbstractVerticle {
                 new JsonObject().put("Message", "Welcome to a sample Okapi module"));
     }
 
+    private void outputHeaders(RoutingContext routingContext) {
+        System.out.println("Headers Received");
+
+        for (Map.Entry<String, String> entry : routingContext.request().headers().entries()) {
+            System.out.format("%s : %s\n", entry.getKey(), entry.getValue());
+        }
+    }
+
     public void getResource(RoutingContext routingContext) {
 
+        outputHeaders(routingContext);
+
         HttpClient client = routingContext.vertx().createHttpClient();
+
+        
 
         client.getAbs("http://localhost:9130/second-module/resource",
             response -> {

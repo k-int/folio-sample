@@ -1,14 +1,31 @@
 
-#Dependencies
+#Goal
+
+This sample aims to demonstrate communication between two modules, via Okapi. The first module makes a simple request to the second and embeds the response in its response.
+
+#Prerequisites
 
 Java 8 JDK
-Gradle
-Docker
+Gradle 3.0i-rc-2
+Groovy 2.4.7
+Docker (only if hosting modules in containers, not currently working)
 
-#Usage
+#Preparation
 
-To run the first sample module, inside a docker container execute `./run` from the root of this repository.
+If sdkman (http://sdkman.io/) is installed, run `source ./setup-environment.sh` to setup the shell with the appropriate versions of Gradle and Groovy.
 
-This will print an identifier for the container running the first module Docker image, to stop it running, execute `docker stop <identifier>`.
+Make sure that Okapi is running on it's default port of 9130 (see https://github.com/sling-incubator/okapi/blob/master/doc/guide.md for details).
 
-Whilst the module is running, it should be possible to visit http://localhost:9201 and receive a response similar to `{ "Message" : "Welcome to a sample Okapi module" }`
+#Running the Modules
+
+To run the modules, execute `./start-modules.sh` from the root. To stop them, execute `./stop-modules.sh`.
+
+#Registering the Modules With Okapi
+
+From the setup directory, run `./setup-okapi.sh` this will configure Okapi with the relevant module configuration and set up a test tenant.
+
+#Using the Modules
+
+Then it is possible to make requests to the two modules, as demonstrated in the request-second-module.sh and request-first-module.sh scripts.
+
+

@@ -1,0 +1,18 @@
+{
+  "id" : "first-module",
+  "name" : "First okapi sample module",
+  "provides" : [ {
+    "id" : "first-module",
+    "version" : "0.1"
+  } ],
+  "routingEntries" : [ {
+    "methods" : [ "GET" ],
+    "path" : "/first-module",
+    "level" : "30",
+    "type" : "request-response"
+  },  {
+    "methods" : [ "GET" ],
+    "path" : "/first-module/resource",
+    "level" : "30",
+    "type" : "request-response" } ]
+}
