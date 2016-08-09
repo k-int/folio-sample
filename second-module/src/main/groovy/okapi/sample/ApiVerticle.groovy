@@ -33,8 +33,8 @@ public class ApiVerticle extends AbstractVerticle {
 
         def router = Router.router(vertx)
 
-        router.route(HttpMethod.GET, "/resource").handler(this.&getResource)
-        router.route().handler(this.&handleRoot)
+        router.route(HttpMethod.GET, "/second-module/resource").handler(this.&getResource)
+        router.route(HttpMethod.GET, "/second-module").handler(this.&handleRoot)
 
         server.requestHandler(router.&accept)
                 .listen(9202,

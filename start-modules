@@ -1,7 +1,5 @@
 cd first-module
 
-gradle fatJar
-
 ./docker-build
 
 ./docker-run
@@ -9,8 +7,6 @@ gradle fatJar
 cd ..
 
 cd second-module
-
-gradle fatJar
 
 ./docker-build
 

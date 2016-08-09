@@ -36,9 +36,8 @@ public class ApiVerticle extends AbstractVerticle {
 
         Router router = Router.router(vertx);
 
-        router.route(HttpMethod.GET, "/resource").handler(this::getResource);
-
-        router.route().handler(this::handleRoot);
+        router.route(HttpMethod.GET, "/first-module/resource").handler(this::getResource);
+        router.route(HttpMethod.GET, "/first-module").handler(this::handleRoot);
 
         server.requestHandler(router::accept)
                 .listen(9201,
@@ -76,7 +75,7 @@ public class ApiVerticle extends AbstractVerticle {
 
         HttpClient client = routingContext.vertx().createHttpClient();
 
-        client.getAbs("http://localhost:9202/resource",
+        client.getAbs("http://localhost:9130/second-module/resource",
             response -> {
                 response.bodyHandler(buffer -> {
                     JsonObject resource = new JsonObject();
@@ -87,7 +86,7 @@ public class ApiVerticle extends AbstractVerticle {
 
                     success(routingContext.response(), resource);
                 });
-            }).end();
+            }).putHeader("X-Okapi-Tenant", "our").end();
     }
 
     private void success(io.vertx.core.http.HttpServerResponse response, Object body) {

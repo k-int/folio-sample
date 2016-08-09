@@ -1,0 +1,6 @@
+{
+  "srvcId" : "second-module",
+  "descriptor" : {
+    "exec" : "docker run -d -p %p:9202 second-module"
+  }
+}
