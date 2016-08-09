@@ -81,9 +81,26 @@ public class ApiVerticle extends AbstractVerticle {
 
         HttpClient client = routingContext.vertx().createHttpClient();
 
-        
+        //Currently force the module to only work via Okapi, by requiring the headers
+        String okapiLocation = routingContext.request().getHeader("X-Okapi-Url");
+        String tenant = routingContext.request().getHeader("X-Okapi-Tenant");
 
-        client.getAbs("http://localhost:9130/second-module/resource",
+        System.out.format("Okapi Location : %s\n", okapiLocation);
+        System.out.format("Okapi Tenant : %s\n", tenant);
+
+        if (okapiLocation == null) {
+            routingContext.response()
+                    .setStatusCode(400)
+                    .setStatusMessage("Must be requested via Okapi so can determine how to call second module")
+                    .end();
+                    return;
+        }
+
+        String secondModuleLocation = okapiLocation.concat("second-module/resource");
+
+        System.out.format("Second Module Location : %s\n", secondModuleLocation);
+
+        client.getAbs(secondModuleLocation,
             response -> {
                 response.bodyHandler(buffer -> {
                     JsonObject resource = new JsonObject();
@@ -94,7 +111,7 @@ public class ApiVerticle extends AbstractVerticle {
 
                     success(routingContext.response(), resource);
                 });
-            }).putHeader("X-Okapi-Tenant", "our").end();
+            }).putHeader("X-Okapi-Tenant", tenant).end();
     }
 
     private void success(io.vertx.core.http.HttpServerResponse response, Object body) {
