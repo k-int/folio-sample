@@ -13,3 +13,11 @@ cd second-module
 ./docker-run
 
 cd ..
+
+cd third-module
+
+./docker-build
+
+./docker-run
+
+

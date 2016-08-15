@@ -1,18 +1,18 @@
 {
-  "id" : "second-module",
-  "name" : "Second okapi sample module",
+  "id" : "third-module",
+  "name" : "Third okapi sample module",
   "provides" : [ {
     "id" : "shared-module-interface",
     "version" : "0.1"
   } ],
   "routingEntries" : [ {
     "methods" : [ "GET" ],
-    "path" : "/second-module",
+    "path" : "/third-module",
     "level" : "30",
     "type" : "request-response"
   },  {
     "methods" : [ "GET" ],
-    "path" : "/second-module/resource",
+    "path" : "/third-module/resource",
     "level" : "30",
     "type" : "request-response" } ]
 }

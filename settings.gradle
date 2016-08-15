@@ -1,2 +1,2 @@
-include 'first-module', 'second-module', 'client'
+include 'first-module', 'second-module', 'third-module', 'client'
 
