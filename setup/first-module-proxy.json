@@ -10,9 +10,5 @@
     "path" : "/first-module",
     "level" : "30",
     "type" : "request-response"
-  },  {
-    "methods" : [ "GET" ],
-    "path" : "/first-module/resource",
-    "level" : "30",
-    "type" : "request-response" } ]
+  }]
 }

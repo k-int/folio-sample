@@ -5,14 +5,13 @@
     "id" : "second-module",
     "version" : "0.1"
   } ],
-  "routingEntries" : [ {
-    "methods" : [ "GET" ],
-    "path" : "/second-module",
-    "level" : "30",
-    "type" : "request-response"
-  },  {
-    "methods" : [ "GET" ],
-    "path" : "/second-module/resource",
-    "level" : "30",
-    "type" : "request-response" } ]
+  "routingEntries" : [
+    {
+      "methods": [
+        "GET"
+      ],
+      "path": "/second-module",
+      "level": "30",
+      "type": "request-response"
+    }]
 }
