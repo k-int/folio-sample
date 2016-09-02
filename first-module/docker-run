@@ -1,1 +1,1 @@
-docker run -d -p 9201:9201 first-module
+docker run -d --name first-module-container -p 9201:9201 first-module

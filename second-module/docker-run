@@ -1,1 +1,1 @@
-docker run -d -p 9202:9202 second-module
+docker run -d --name second-module-container -p 9202:9202 second-module
